@@ -1,5 +1,4 @@
 # Algorithms/scaling_ford_fulkerson.py
-# Scaling Ford-Fulkerson Algorithm
 # Author: Aayush Modi 
 
 import math

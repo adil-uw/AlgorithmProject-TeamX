@@ -7,8 +7,6 @@ from Algorithms.ford_fulkerson import fordFulkMaxFlow             #ADIL
 from Algorithms.scaling_ford_fulkerson import max_flow_scaling    #AAYUSH
 from Algorithms.preflow_push import max_flow_preflow              #LAKSHMAN  
 # ---------------------------------------------------------------
-
-
 def choose_algorithm():
     while True:
         print("\nChoose Algorithm:")
@@ -83,7 +81,7 @@ def choose_graph_file():
 
 def main():
     print("========== MAX FLOW PROJECT ==========")
-
+    
     # ------------------ MAIN SELECTION LOOP ------------------
     while True:
         algo_choice = choose_algorithm()

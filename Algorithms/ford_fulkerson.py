@@ -1,4 +1,6 @@
-# ford_fulkerson.py
+# ford_fulkerson.py      
+# Author Lakshman Golla  
+
 from typing import List, Tuple
 
 EdgeTuple = Tuple[int, int, int]   # (u, v, capacity)
