@@ -1,66 +1,11 @@
 # Algorithms/scaling_ford_fulkerson.py
 # Scaling Ford-Fulkerson Algorithm
-# Author: Aayush Modi
-# ---------------------------------------------------------------
-"""
-Scaling Ford-Fulkerson Algorithm for Maximum Flow
-
-This algorithm improves upon basic Ford-Fulkerson by using a threshold 
-parameter Δ (delta) that starts at the largest power of 2 ≤ max capacity.
-It only considers augmenting paths with bottleneck capacity ≥ Δ, which
-avoids making many small augmentations.
-
-Algorithm Steps:
-1. Initialize Δ = largest power of 2 ≤ max capacity out of source
-2. Build restricted residual graph G_f^Δ (only edges with residual capacity ≥ Δ)
-3. Find augmenting paths in G_f^Δ and push flow
-4. When no more paths exist, reduce Δ by half (Δ = Δ/2)
-5. Repeat until Δ < 1
-
-Time Complexity: O(m² log C) where:
-    - m = number of edges
-    - C = maximum capacity value
-
-This is polynomial in the input size, unlike basic Ford-Fulkerson 
-which can be O(mC) - potentially exponential in input size.
-
-Reference: Algorithm Design by Kleinberg & Tardos, Chapter 7.3
-"""
+# Author: Aayush Modi 
 
 import math
 from collections import defaultdict, deque
 
-
 def max_flow_scaling(n, edges, s, t):
-    """
-    Compute maximum flow using Scaling Ford-Fulkerson algorithm.
-    
-    Parameters:
-    -----------
-    n : int
-        Number of nodes in the graph (nodes numbered 0 to n-1)
-    edges : list of tuples
-        Each tuple is (u, v, capacity) representing a directed edge
-        from node u to node v with given capacity
-    s : int
-        Source node ID (where flow originates)
-    t : int
-        Sink node ID (where flow terminates)
-    
-    Returns:
-    --------
-    int
-        Maximum flow value from source s to sink t
-        
-    Example:
-    --------
-    >>> n = 4
-    >>> edges = [(0, 1, 10), (0, 2, 5), (1, 3, 10), (2, 3, 20)]
-    >>> s, t = 0, 3
-    >>> max_flow_scaling(n, edges, s, t)
-    15
-    """
-    
     # ==================== STEP 1: Build Graph Structure ====================
     # Create adjacency list representation for efficient neighbor lookup
     # graph[u] = [(v1, cap1), (v2, cap2), ...] means edges u->v1, u->v2, etc.
@@ -69,12 +14,10 @@ def max_flow_scaling(n, edges, s, t):
     for u, v, cap in edges:
         graph[u].append((v, cap))
     
-    
     # ==================== STEP 2: Initialize Flow ====================
     # Flow dictionary: flow[(u, v)] = current flow on edge (u, v)
     # Initially all flows are 0
     flow = defaultdict(int)
-    
     
     # ==================== STEP 3: Find Maximum Capacity & Initialize Delta ====================
     # To initialize Δ, we need the maximum capacity of any edge leaving source
@@ -89,33 +32,11 @@ def max_flow_scaling(n, edges, s, t):
     
     # Initialize Δ (delta) as the largest power of 2 that is ≤ max_capacity
     # Example: if max_capacity = 100, then delta = 64 (2^6)
-    delta = 2 ** int(math.log2(max_capacity))
-    
+    delta = 2 ** int(math.log2(max_capacity))  
     
     # ==================== HELPER FUNCTIONS ====================
     
     def build_residual_graph(delta_threshold):
-        """
-        Build the restricted residual graph G_f^Δ.
-        
-        This graph only includes edges with residual capacity ≥ delta_threshold.
-        This is the key difference from basic Ford-Fulkerson!
-        
-        The residual graph contains:
-        1. Forward edges: original edges with unused capacity ≥ Δ
-        2. Backward edges: reverse of edges that currently carry flow ≥ Δ
-        
-        Parameters:
-        -----------
-        delta_threshold : int
-            Minimum residual capacity for edges to be included
-        
-        Returns:
-        --------
-        dict
-            residual[u] = [(v, residual_capacity, is_forward), ...]
-            where is_forward = True for forward edges, False for backward
-        """
         residual = defaultdict(list)
         
         # Add forward edges: original edges with sufficient unused capacity
@@ -139,27 +60,7 @@ def max_flow_scaling(n, edges, s, t):
         
         return residual
     
-    
     def bfs_find_path(residual):
-        """
-        Find an augmenting path from source s to sink t using BFS.
-        
-        BFS (Breadth-First Search) is used to find the shortest path
-        in terms of number of edges. This is more efficient than DFS
-        for this application.
-        
-        Parameters:
-        -----------
-        residual : dict
-            The residual graph G_f^Δ
-        
-        Returns:
-        --------
-        list or None
-            If path exists: [(u1, v1, is_forward), (u2, v2, is_forward), ...]
-            where each tuple represents an edge in the path
-            If no path: None
-        """
         # BFS initialization
         visited = {s}  # Set of visited nodes
         parent = {s: None}  # parent[node] = previous node in path
@@ -196,26 +97,7 @@ def max_flow_scaling(n, edges, s, t):
         # No path found from s to t
         return None
     
-    
     def compute_bottleneck(path, residual):
-        """
-        Find the bottleneck (minimum residual capacity) along the path.
-        
-        The bottleneck determines how much flow we can push along this path.
-        It's the minimum of all edge capacities in the path.
-        
-        Parameters:
-        -----------
-        path : list of tuples
-            [(u1, v1, is_forward), (u2, v2, is_forward), ...]
-        residual : dict
-            The residual graph
-        
-        Returns:
-        --------
-        int
-            Bottleneck capacity (minimum residual capacity on path)
-        """
         min_cap = float('inf')
         
         # Check each edge in the path
@@ -228,22 +110,7 @@ def max_flow_scaling(n, edges, s, t):
         
         return min_cap
     
-    
     def augment_flow(path, bottleneck):
-        """
-        Push flow along the path by the bottleneck amount.
-        
-        This updates the flow dictionary in-place:
-        - For forward edges: increase flow
-        - For backward edges: decrease flow on the reverse edge
-        
-        Parameters:
-        -----------
-        path : list of tuples
-            [(u1, v1, is_forward), ...]
-        bottleneck : int
-            Amount of flow to push along the path
-        """
         for u, v, is_forward in path:
             if is_forward:
                 # Forward edge: increase flow from u to v
@@ -253,13 +120,7 @@ def max_flow_scaling(n, edges, s, t):
                 # This means we're decreasing flow from v to u
                 flow[(v, u)] -= bottleneck
     
-    
     # ==================== STEP 4: MAIN SCALING ALGORITHM ====================
-    """
-    Outer loop: Scaling phases (reduce delta by half each time)
-    Inner loop: Find and augment paths with bottleneck ≥ delta
-    """
-    
     while delta >= 1:
         # === Scaling Phase: Process all paths with bottleneck ≥ delta ===
         
@@ -284,7 +145,6 @@ def max_flow_scaling(n, edges, s, t):
         # Move to next scaling phase: reduce delta by half
         delta = delta // 2
     
-    
     # ==================== STEP 5: Compute Final Flow Value ====================
     # The flow value is the total flow leaving the source
     max_flow_value = 0
@@ -293,15 +153,10 @@ def max_flow_scaling(n, edges, s, t):
             max_flow_value += flow[(u, v)]
     
     return max_flow_value
-
-
+  
 # ==================== OPTIONAL: STANDALONE TESTING ====================
 if __name__ == "__main__":
-    """
-    Test cases for development and debugging.
-    Run this file directly to test: python3 Algorithms/scaling_ford_fulkerson.py
-    """
-    
+
     print("="*60)
     print("TESTING SCALING FORD-FULKERSON ALGORITHM")
     print("="*60)
@@ -309,20 +164,6 @@ if __name__ == "__main__":
     # -------------------- Test Case 1: Simple Graph --------------------
     print("\n[TEST 1] Simple 4-node graph")
     print("-" * 40)
-    """
-    Graph structure:
-        s(0) --10--> (1) --10--> t(3)
-         |            |
-         5            5
-         |            |
-         v            v
-        (2) ----20---> t(3)
-    
-    Optimal flow paths:
-    - s -> 1 -> t: 10 units
-    - s -> 2 -> t: 5 units
-    Total: 15 units
-    """
     
     n1 = 4
     edges1 = [
@@ -343,8 +184,7 @@ if __name__ == "__main__":
     print(f"\nResult: {result1}")
     print(f"Expected: {expected1}")
     print(f"Status: {'✓ PASSED' if result1 == expected1 else '✗ FAILED'}")
-    
-    
+     
     # -------------------- Test Case 2: Larger Capacities --------------------
     print("\n[TEST 2] Graph with large capacities")
     print("-" * 40)
@@ -372,7 +212,6 @@ if __name__ == "__main__":
     print(f"\nResult: {result2}")
     print(f"Expected: {expected2}")
     print(f"Status: {'✓ PASSED' if result2 == expected2 else '✗ FAILED'}")
-    
     
     # -------------------- Test Case 3: Bottleneck Edge --------------------
     print("\n[TEST 3] Graph with bottleneck edge")
@@ -402,7 +241,6 @@ if __name__ == "__main__":
     print(f"Expected: {expected3}")
     print(f"Status: {'✓ PASSED' if result3 == expected3 else '✗ FAILED'}")
     
-    
     # -------------------- Test Case 4: No Path --------------------
     print("\n[TEST 4] Disconnected graph (no path from s to t)")
     print("-" * 40)
@@ -423,8 +261,7 @@ if __name__ == "__main__":
     print(f"\nResult: {result4}")
     print(f"Expected: {expected4}")
     print(f"Status: {'✓ PASSED' if result4 == expected4 else '✗ FAILED'}")
-    
-    
+
     # -------------------- Summary --------------------
     print("\n" + "="*60)
     print("TEST SUMMARY")
