@@ -1,17 +1,11 @@
 # main.py
 # Main driver for running max-flow algorithms on any input graph.
-# ---------------------------------------------------------------
-
 import time
 import os
 from read_graph import read_graph
-
-
-# ---------------------------------------------------------------
-# When algorithms are ready, uncomment these:
-from Algorithms.ford_fulkerson import fordFulkMaxFlow               #ADIL
-# from Algorithms.scaling_ff import max_flow_scaling                #AAYUSH
-# from Algorithms.preflow_push import max_flow_preflow              #LAKSHMAN  
+from Algorithms.ford_fulkerson import fordFulkMaxFlow             #ADIL
+from Algorithms.scaling_ford_fulkerson import max_flow_scaling    #AAYUSH
+from Algorithms.preflow_push import max_flow_preflow              #LAKSHMAN  
 # ---------------------------------------------------------------
 
 
@@ -118,12 +112,12 @@ def main():
         algo_name = "Scaling Ford–Fulkerson"
         print("\n[INFO] Scaling FF selected.")
         print("*****************Algorithm NOT IMPLEMENTED YET")
-        # algo = max_flow_scaling                #AAYUSH ALGO CALLED HERE
+        algo = max_flow_scaling                #AAYUSH ALGO CALLED HERE
     else:
         algo_name = "Preflow–Push"
         print("\n[INFO] Preflow–Push selected.")
         print("*****************Algorithm NOT IMPLEMENTED YET")
-        # algo = max_flow_preflow                 #LAKSHMAN ALGO CALLED HERE
+        algo = max_flow_preflow                 #LAKSHMAN ALGO CALLED HERE
         
 
     print(f"\nRunning {algo_name}...\n")
