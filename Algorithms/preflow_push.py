@@ -88,22 +88,20 @@ class PreflowPush:
                 if v != source and v != sink and v not in self.active_nodes:
                     self.active_nodes.append(v)
 
-        # process active nodes FIFO
+      
         while self.active_nodes:
             u = self.active_nodes.pop(0)
             old_excess = self.excess[u]
             self.discharge(u, source, sink)
-            # if still has excess after discharge, requeue
             if self.excess[u] > 0 and u not in self.active_nodes and u != source and u != sink:
                 self.active_nodes.append(u)
 
-        # max flow is total flow out of source (sum of positive flows)
+        
         maxflow = sum(self.flow[source][v] for v in range(self.V))
         return maxflow
 
-# ...existing code...
+
 class GraphGenerator:
-    # ...existing GraphGenerator code retained (no changes) ...
     def generate_random_graph(self, num_nodes, probability, max_capacity):
         graph = [[0 for _ in range(num_nodes)] for _ in range(num_nodes)]
         for u in range(num_nodes):
