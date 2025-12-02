@@ -1,6 +1,6 @@
 # Algorithms/scaling_ford_fulkerson.py
 # Scaling Ford-Fulkerson Algorithm
-# Author: Aayush
+# Author: Aayush Modi
 # ---------------------------------------------------------------
 """
 Scaling Ford-Fulkerson Algorithm for Maximum Flow
@@ -445,3 +445,4 @@ if __name__ == "__main__":
         print("Please review the failed test cases above")
     
     print("="*60)
+
