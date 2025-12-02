@@ -9,9 +9,9 @@ from read_graph import read_graph
 
 # ---------------------------------------------------------------
 # When algorithms are ready, uncomment these:
-# from ford_fulkerson import max_flow_ff                 #ADIL
-# from scaling_ff import max_flow_scaling                #AAYUSH
-# from preflow_push import max_flow_preflow              #LAKSHMAN  
+from Algorithms.ford_fulkerson import fordFulkMaxFlow               #ADIL
+# from Algorithms.scaling_ff import max_flow_scaling                #AAYUSH
+# from Algorithms.preflow_push import max_flow_preflow              #LAKSHMAN  
 # ---------------------------------------------------------------
 
 
@@ -113,8 +113,7 @@ def main():
     if algo_choice == "1":
         algo_name = "Ford–Fulkerson (DFS)"
         print("\n[INFO] Ford–Fulkerson selected.")
-        print("[*****************Algorithm NOT IMPLEMENTED YET")
-        # algo = max_flow_ff                     #ADIL ALGO CALLED HERE
+        algo = fordFulkMaxFlow                     #ADIL ALGO CALLED HERE
     elif algo_choice == "2":
         algo_name = "Scaling Ford–Fulkerson"
         print("\n[INFO] Scaling FF selected.")
@@ -130,23 +129,19 @@ def main():
     print(f"\nRunning {algo_name}...\n")
     
     start = time.time()
-    #maxflow = algo(n, edges, s, t)
+    maxflow = algo(n, edges, s, t)
     end = time.time()
 
-    # ---------- DRY RUN OUTPUT (NO ALGORITHMS YET) ----------
-    print("========== DRY RUN RESULT ==========")
+    print("====================================\n")
     print(f"Algorithm: {algo_name}")
-   # print(f"Graph file: {graph_path}")
+    print(f"Graph file: {graph_path}")
     print(f"Total nodes: {n}")
     print(f"Total edges: {len(edges)}")
     print(f"Source (s): {s}")
     print(f"Sink (t):   {t}")
-    print("====================================")
-    print("Input + parsing confirmed working!")
-    print("Algorithms will be plugged in next.")
-   # print(f"Runtime:    {end - start:.6f} seconds")
+    print("Max Flow:   ", maxflow)
+    print(f"Runtime:    {end - start:.6f} seconds")
     print("====================================\n")
-
 
 if __name__ == "__main__":
     main()
